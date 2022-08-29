@@ -1,0 +1,132 @@
+//B2でID取得
+//B3でログインパスワード入力
+
+  var ss = SpreadsheetApp.getActive();
+  var sheetStep4 = ss.getSheetByName('step4');
+
+
+function test36(){
+
+  //B2からID取得
+  var id =  sheetStep4.getRange(2,2).getValue();
+
+  //空白の場合エラー                                 ※ !=  ノットイコール　Javaでいうと　if(!(   ))    
+   if ( id == "" ){               
+       var msg_Txt = "空白です"
+   var msg_Title = "ID"
+   var msg_Select
+    msg_Select=Browser.msgBox(msg_Txt,msg_Title,Browser.Buttons.OK_CANCEL);
+   Browser.msgBox(msg_Select);
+
+   return ;
+
+  }
+
+  //B3からパスワード取得
+  var pas = sheetStep4.getRange(3,2).getValue();
+ 
+
+
+  //データを取りに行く 一括取得配列される
+
+  var dataSheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1Gq1KZOsDfXLB5EBe07wArNJJ0628q3kOFPz_KN1W1Vo/edit#gid=331813644");
+  var shDatabase = dataSheet.getSheetByName('database');
+  var arrayDatabase = shDatabase.getDataRange().getValues();
+
+ // console.log(arrayDatabase)
+
+
+  //データから情報を抜き出す
+
+  //IDとパスワードも一致するデータを抜き出す
+  var target =[ ]
+
+  for (var i = 0; i <arrayDatabase.length; i++) {
+     //console.log(arrayDatabase[i])
+
+     var person = arrayDatabase[i]
+
+    //console.log(arrayDatabase[i][1])
+
+      var uPass = person[1]
+      var uId   = person[0]
+
+     if( id  ==  uId ){
+  
+       if( pas == uPass ){
+
+       target = person
+      
+       }
+      
+    }
+
+  }
+
+    console.log(target,"★")
+
+
+    //IDとパスワードが一致しないときの不一致ポップアップウィンドウ
+
+    if(target.length == 0 ){
+
+      var msg_Txt = "該当者なし"
+      var msg_Title = "IDとパスワードの不一致"
+      var msg_Select
+      msg_Select=Browser.msgBox(msg_Txt,msg_Title,Browser.Buttons.OK_CANCEL);
+      Browser.msgBox(msg_Select);
+
+   }
+
+
+
+  console.log(target)
+
+  var targetData  = [target[2],target[3],target[4],target[5],target[6],target[7],target[8],target[9],target[10] ]  //"" で空欄
+
+
+  //A6J6 からチェックマークのデータを取得
+
+  var check  =  sheetStep4.getRange(6,2,1,9).getValues();
+
+
+  console.log(check)
+  
+  var checkData   = check[0]  　　　　　　　　　　　　　　　　　　　　　　   //array[0]  で二次元配列を一次元配列に出来る
+
+ 
+   console.log(checkData)                                             //チェック一覧取得
+
+    var writeData =[];
+
+    for (var j = 0; j <checkData.length; j++) {
+  
+      if( true ===  checkData [j]  ){ 
+        
+        writeData[j]=targetData[j]
+        
+        console.log(  targetData[j]  )   
+      
+        }else{
+
+        writeData[j] = "" 
+          
+     
+      }
+    }
+  console.log(writeData)
+  
+  sheetStep4.getRange(8,2,1,9).setValues( [writeData] )    　　　　　//  []で挟むと二次元配列になる setValuesの　s　を忘れないように注意！
+
+
+
+}
+
+
+function msg_Box() {
+   var msg_Txt = "入力が間違っています"
+   var msg_Title = "ID"
+   var msg_Select
+ msg_Select=Browser.msgBox(msg_Txt,msg_Title,Browser.Buttons.OK_CANCEL);
+   Browser.msgBox(msg_Select);
+}
