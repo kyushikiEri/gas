@@ -1,0 +1,12 @@
+function detaSeet() {
+
+  //https://docs.google.com/spreadsheets/d/1Gq1KZOsDfXLB5EBe07wArNJJ0628q3kOFPz_KN1W1Vo/edit#gid=331813644
+
+  var dataSheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1Gq1KZOsDfXLB5EBe07wArNJJ0628q3kOFPz_KN1W1Vo/edit#gid=331813644");
+  var shDatabase = dataSheet.getSheetByName('database');
+  var arrayDatabase = shDatabase.getDataRange().getValues();
+
+  console.log(arrayDatabase)
+
+  
+}
